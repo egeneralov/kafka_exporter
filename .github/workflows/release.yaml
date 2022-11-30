@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: build kafka_exporter-amd64-server
-        run: GOOS=linux GOARCH="amd64" go build -a -v -installsuffix cgo -ldflags="-w -s" -o kafka_exporter-amd64 cmd/kafka_exporter/*.go
+        run: GOOS=linux GOARCH="amd64" go build -a -v -installsuffix cgo -ldflags="-w -s" -o kafka_exporter-amd64 *.go
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
