@@ -1,10 +1,20 @@
-FROM        quay.io/prometheus/busybox:latest
-MAINTAINER  Daniel Qian <qsj.daniel@gmail.com>
+FROM golang:1.18.3-alpine
 
-ARG TARGETARCH
-ARG BIN_DIR=.build/linux-${TARGETARCH}/
+RUN apk add --no-cache ca-certificates git
 
-COPY ${BIN_DIR}/kafka_exporter /bin/kafka_exporter
+ENV \
+  GO111MODULE=on \
+  CGO_ENABLED=0 \
+  GOOS=linux
 
-EXPOSE     9308
-ENTRYPOINT [ "/bin/kafka_exporter" ]
+WORKDIR /go/src/github.com/rancher/kafka_exporter
+
+ADD . .
+RUN go build -v -installsuffix cgo -ldflags="-w -s" -o /go/bin/kafka_exporter .
+
+
+FROM alpine:3.16
+RUN apk add --no-cache ca-certificates
+COPY --from=0 /go/bin /go/bin
+ENV PATH='/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+CMD /go/bin/kafka_exporter

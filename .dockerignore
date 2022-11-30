@@ -1,4 +1,7 @@
-vendor
+.git
+.gitignore
+.github
+.dockerignore
 Dockerfile
-Makefile
-README.md
+.gitlab-ci.yml
+vendor
