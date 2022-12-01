@@ -17,4 +17,4 @@ FROM alpine:3.16
 RUN apk add --no-cache ca-certificates
 COPY --from=0 /go/bin /go/bin
 ENV PATH='/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-CMD /go/bin/kafka_exporter
+ENTRYPOINT ["/go/bin/kafka_exporter"]
